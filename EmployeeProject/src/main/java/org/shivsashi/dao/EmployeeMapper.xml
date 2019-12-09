@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.shivsashi.dao.EmployeeMapper">
+    <resultMap type="employee" id="result">
+        <id property="employeeId" column="empId" />
+        <result property="firstName" column="firstName" />
+        <result property="lastName" column="lastName" />
+        <result property="age" column="age" />
+        <result property="gender" column="gender" />
+        <result property="salary" column="salary" />
+        <result property="department" column="department" />
+        <result property="state" column="state" />
+        <result property="city" column="city" />
+        <result property="address" column="address" />
+        <result property="email" column="email" />
+        <collection property="skills" javaType="List" ofType="skill" resultMap="skillResult" columnPrefix="skill_"/>
+    </resultMap>
+    
+    <resultMap type="skill" id="skillResult">
+	    <id property="skillId" column="id"/>
+	    <result property="skillName" column="name"/>
+	    <result property="empId" column="empId"/>
+    </resultMap>
+    
+    <select id="getAllEmployees" resultType="employee" resultMap="result">
+     Select
+        e.empid, e.firstname,  e.lastname, e.age, e.salary, e.department, e.state, e.city, e.address, e.gender, e.email, s.skillid as skill_id, s.skillName as skill_name,
+        s.empId  as skill_empid from Employee60 e right outer join Skill60 s on e.empid = s.empid
+    </select>
+ 
+    <insert id="insertEmployee" parameterType="employee" keyProperty="employeeId" keyColumn="empId">
+        INSERT INTO EMPLOYEE60 (firstName, lastName, age, salary, department, state, city, address, gender, email) 
+        VALUES(#{firstName}, #{lastName}, #{age}, #{salary}, #{department}, #{state}, #{city}, #{address}, #{gender}, #{email})
+    </insert>
+ 
+    <update id="updateEmployee" parameterType="employee">
+        UPDATE EMPLOYEE60 SET firstName = #{firstName}, lastName = #{lastName}, age = #{age}, salary = #{salary}, department = #{department}, state = #{state},
+        city = #{city}, address = #{address}, gender = #{gender}, email = #{email} WHERE empid = #{employeeId}
+    </update>
+ 
+    <delete id="deleteEmployee" parameterType="int">
+        DELETE FROM EMPLOYEE60 WHERE empid = #{employeeId}
+    </delete>
+ 
+    <select id="getEmployeeById" parameterType="int" resultType="employee" resultMap="result">
+        SELECT * FROM Employee60 WHERE empid = #{employeeId}
+    </select>
+    
+    <select id="getId" resultType="employee" resultMap="result">
+    	SELECT * FROM ( SELECT * FROM EMPLOYEE60 ORDER BY empid DESC) WHERE ROWNUM = 1
+    </select>
+</mapper>

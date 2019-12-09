@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.shivsashi.dao.SkillSetMapper">
+
+   <resultMap type="skill" id="skillResult">
+	    <id property="skillId" column="skillId"/>
+	    <result property="skillName" column="skillName"/>
+	    <result property="empId" column="empId"/>
+   </resultMap>
+ 
+    <insert id="insertSkill" parameterType="skill" keyProperty="skillId" keyColumn="skillId">
+        INSERT INTO SKILL60 (skillName, empId) VALUES(#{skillName}, #{empId})
+    </insert>
+ 
+    <delete id="deleteSkill" parameterType="int">
+        DELETE FROM Skill60 WHERE empId = #{empId}
+    </delete>
+    
+    <select id="getAllSkills" parameterType="int" resultType="skill" resultMap="skillResult">
+     	SELECT * FROM SKILL60 WHERE EMPID = #{empId}
+    </select>
+
+</mapper>
